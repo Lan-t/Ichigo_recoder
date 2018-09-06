@@ -6,7 +6,7 @@
 60 'convert on server
 70 IF C%181!=0 GOTO80 ELSE C=0:WAIT300
 71   ?"MJ POST START [SERVER'S IP or URL]
-72   ?"A;" ";B
+72   ?"BIN$(A);" ";BIN$(B)
 73 ?"MJ POST END
 74 WAIT300
 75 ?"MJ SLEEP ";60*30

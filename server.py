@@ -4,6 +4,8 @@ import time
 class MyHandler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
+        if self.path == '/reset':open('resoureces/log.log','w').write('')
+        
         body = open('resoureces/log.log').read()
         self.send_response(200)
         self.send_header('Content-type', 'text; charset=utf-8')
@@ -12,8 +14,6 @@ class MyHandler(SimpleHTTPRequestHandler):
         self.wfile.write(body.encode("UTF-8"))
 
     def do_POST(self):
-        if self.path == '/reset':open('resoureces/log.log','w').write('')
-        
         body = ''
         try:
             content_len = int(self.headers.get('content-length'))
@@ -27,7 +27,7 @@ class MyHandler(SimpleHTTPRequestHandler):
             res = 400
 
         try:
-            track = [float(i) for i in req_str.split(' ')]
+            track = [i for i in req_str.split(' ')]
             log(track)
         except ValueError:
             body = '\'Data format: キオン[SP]シツド'
@@ -42,7 +42,11 @@ class MyHandler(SimpleHTTPRequestHandler):
 
 def log(track):
     t = time.localtime()
-    text = '%d/%d/%d %d:%d:%d %.5f %.5f\n'%(t.tm_year, t.tm_mon, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec, (track[0]/2**16)*165-40, (track[1]/2**16)*100
+    s = ( int(track[0],2) / 2**16 ) * 165 -40
+    h = ( int(track[1],2) / 2**16 ) * 100
+
+    
+    text = '%d/%d/%d %d:%d:%d %d %d\n'%(t.tm_year, t.tm_mon, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec, s, h)
     open('resoureces/log.log', 'a').write(text)
     open('resoureces/backup', 'a').write(text)
 
